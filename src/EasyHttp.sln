@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyHttp", "EasyHttp\EasyHt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyHttp.Specs", "EasyHttp.Specs\EasyHttp.Specs.csproj", "{6F950A41-727E-4416-8D5B-809946DD2836}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyHttp.UnitTests", "EasyHttp.UnitTests\EasyHttp.UnitTests.csproj", "{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,16 @@ Global
 		{6F950A41-727E-4416-8D5B-809946DD2836}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6F950A41-727E-4416-8D5B-809946DD2836}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6F950A41-727E-4416-8D5B-809946DD2836}.Release|x86.ActiveCfg = Release|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8B389D7E-0094-4FCF-B49C-7CB8A89F963C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

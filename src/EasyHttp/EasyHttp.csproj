@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Codecs\DefaultDecoder.cs" />
+    <Compile Include="Codecs\DynamicXml.cs" />
     <Compile Include="Codecs\IEncoder.cs" />
     <Compile Include="Codecs\JsonFXExtensions\RegExBasedDataReaderProvider.cs" />
     <Compile Include="Codecs\JsonFXExtensions\RegExBasedDataWriterProvider.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Codecs\JsonFXExtensions\RemoveAmerpsandFromNameJsonResolverStrategy.cs" />
     <Compile Include="Codecs\JsonFXExtensions\UrlEncoderTextFormatter.cs" />
     <Compile Include="Codecs\JsonFXExtensions\UrlEncoderWriter.cs" />
+    <Compile Include="Codecs\XmlDecoder.cs" />
     <Compile Include="Configuration\DefaultContainerConfiguration.cs" />
     <Compile Include="Configuration\IContainerConfiguration.cs" />
     <Compile Include="Http\CacheControl.cs" />
