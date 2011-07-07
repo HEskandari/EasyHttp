@@ -13,7 +13,7 @@ namespace EasyHttp.UnitTests
     public class XmlDecoderTests
     {
         [Test]
-        public void can_decode_xml_response_as_static_object()
+        public void Can_decode_xml_response_as_static_object()
         {
             IDecoder decoder = new XmlDecoder();
 
@@ -47,10 +47,25 @@ namespace EasyHttp.UnitTests
 
             var xml = GetXmlContent();
             var customer = decoder.DecodeToDynamic(xml, HttpContentTypes.ApplicationXml);
+            
+            string id = customer.Id;
+            string count = customer.Info.Count;
 
             Assert.NotNull(customer);
-            Assert.AreEqual("1234", customer.Id.ToString());
-            Assert.AreEqual("3", customer.Info.Count.ToString());
+            Assert.AreEqual("1234", id);
+            Assert.AreEqual("3", count);
+        }
+
+        [Test]
+        public void Dynamic_object_throws_when_attribute_does_not_exist_in_xml()
+        {
+            
+        }
+
+        [Test]
+        public void Dynamic_object_throws_when_element_does_not_exist_in_xml()
+        {
+            
         }
 
         private string GetXmlContent()

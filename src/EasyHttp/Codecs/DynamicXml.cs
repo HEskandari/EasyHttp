@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Dynamic;
-using System.Xml;
 using System.IO;
 using System.Xml.Linq;
 
@@ -11,8 +7,8 @@ namespace EasyHttp.Codecs
 {
     public class DynamicXml : DynamicObject
     {
-        private XElement _element;
-        private XAttribute _attribute;
+        private readonly XElement _element;
+        private readonly XAttribute _attribute;
 
         public DynamicXml(string xmlContent)
         {
@@ -52,20 +48,26 @@ namespace EasyHttp.Codecs
                 result = null;
                 return false;
             }
-            else
-            {
-                result = new DynamicXml(child);
-                return true;
-            }
+            
+            result = new DynamicXml(child);
+            return true;
         }
 
         public override string ToString()
         {
-            if (_element != null)
-                return _element.Value;
+            return this;
+        }
 
-            if (_attribute != null)
-                return _attribute.Value;
+        public static implicit operator string(DynamicXml dynamicXml)
+        {
+            if (dynamicXml != null)
+            {
+                if (dynamicXml._element != null)
+                    return Convert.ToString(dynamicXml._element.Value);
+
+                if (dynamicXml._attribute != null)
+                    return Convert.ToString(dynamicXml._attribute.Value);
+            }
 
             return null;
         }
