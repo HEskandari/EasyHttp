@@ -56,7 +56,6 @@
 // THE SOFTWARE.
 #endregion
 
-using System;
 using EasyHttp.Codecs;
 using EasyHttp.Codecs.JsonFXExtensions;
 using JsonFx.Json;
@@ -77,7 +76,8 @@ namespace EasyHttp.Configuration
         public Registry InitializeContainer()
         {
             _registry.For<IEncoder>().Use<DefaultEncoder>();
-            _registry.For<IDecoder>().Use<DefaultDecoder>();
+            _registry.For<JsonDecoder>().Use<JsonDecoder>().Named("jsonDecoder");
+            _registry.For<XmlDecoder>().Use<XmlDecoder>().Named("xmlDecoder");
             _registry.For<IDataReader>().Singleton().Use<JsonReader>().
                 Ctor<DataReaderSettings>().Is(new DataReaderSettings(
                     CombinedResolverStrategy())).

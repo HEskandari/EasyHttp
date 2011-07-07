@@ -30,7 +30,7 @@ namespace EasyHttp.Specs.BugRepros
         {
             IEnumerable<IDataReader> readers = new List<IDataReader> { new JsonReader(new DataReaderSettings(CombinedResolverStrategy()), HttpContentTypes.ApplicationJson) };
             
-            decoder = new DefaultDecoder(new RegExBasedDataReaderProvider(readers));
+            decoder = new JsonDecoder(new RegExBasedDataReaderProvider(readers));
         };
 
         Because of = () =>

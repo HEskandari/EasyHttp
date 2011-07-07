@@ -65,8 +65,8 @@ namespace EasyHttp.Http
 {
     public class HttpResponse
     {
-        readonly IDecoder _decoder;
-        HttpWebResponse _response;
+        private readonly IDecoderFactory _decoderFactory;
+        private HttpWebResponse _response;
 
         public string ContentType { get; private set; }
         public HttpStatusCode StatusCode { get; private set; }
@@ -91,29 +91,26 @@ namespace EasyHttp.Http
         public CacheControl Pragma { get; private set; }
         public string Server { get; private set; }
         public WebHeaderCollection RawHeaders { get; private set; }
-
-        
-
-        
-        public dynamic DynamicBody
-        {
-            get { return _decoder.DecodeToDynamic(RawText, ContentType); }
-        }
-
         public string RawText { get; set; }
 
+        public dynamic DynamicBody
+        {
+            get { return GetDecoder().DecodeToDynamic(RawText, ContentType); }
+        }
 
         public T StaticBody<T>()
         {
-            return _decoder.DecodeToStatic<T>(RawText, ContentType);
+            return GetDecoder().DecodeToStatic<T>(RawText, ContentType);
         }
 
-
-
-        public HttpResponse(IDecoder decoder)
+        private IDecoder GetDecoder()
         {
-            _decoder = decoder;
-     
+            return _decoderFactory.Create(ContentType);
+        }
+
+        public HttpResponse(IDecoderFactory decoderFactory)
+        {
+            _decoderFactory = decoderFactory;
         }
 
         public void GetResponse(HttpWebRequest request, string filename)
@@ -126,7 +123,6 @@ namespace EasyHttp.Http
 
                 using (var stream = _response.GetResponseStream())
                 {
-                    
                     if (stream != null)
                     {
                         if (!String.IsNullOrEmpty(filename))
@@ -141,7 +137,8 @@ namespace EasyHttp.Http
                                     filestream.Write(buffer, 0, count);
                                 } 
                             }   
-                        } else
+                        } 
+                        else
                         {
                             using (var reader = new StreamReader(stream))
                             {
@@ -150,7 +147,6 @@ namespace EasyHttp.Http
                         }
                     }
                 }
-
             }
             catch (WebException webException)
             {
@@ -165,7 +161,7 @@ namespace EasyHttp.Http
             }
         }
 
-        void GetHeaders()
+        private void GetHeaders()
         {
             ContentType = _response.ContentType;
             StatusCode = _response.StatusCode;
@@ -201,7 +197,6 @@ namespace EasyHttp.Http
             //   public HttpMethod Allow { get; private set; }
             //   public CacheControl CacheControl { get; private set; }
             //   public CacheControl Pragma { get; private set; }
-
 
             RawHeaders = _response.Headers;
         }

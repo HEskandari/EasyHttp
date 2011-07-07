@@ -58,9 +58,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Text;
 using EasyHttp.Codecs;
 using EasyHttp.Configuration;
 using EasyHttp.Infrastructure;
@@ -70,36 +67,33 @@ namespace EasyHttp.Http
 {
     public class HttpClient
     {
-        readonly IEncoder _encoder;
-        string _downloadFilename;
-        IDecoder _decoder;
+        private readonly IEncoder _encoder;
+        private readonly IDecoderFactory _decoderFactory;
+        private string _downloadFilename;
 
-        public bool LoggingEnabled { get; set; }
-        public bool ThrowExceptionOnHttpError { get; set; }
-      
-        
-        public HttpClient():this(new DefaultContainerConfiguration())
+        public HttpClient()
+            : this(new DefaultContainerConfiguration())
         {
-
         }
-      
+
         public HttpClient(IContainerConfiguration containerConfiguration)
         {
             var registry = containerConfiguration.InitializeContainer();
 
-            ObjectFactory.Initialize(
-                x => x.AddRegistry(registry));
+            ObjectFactory.Initialize(x => x.AddRegistry(registry));
 
             _encoder = ObjectFactory.GetInstance<IEncoder>();
-            _decoder = ObjectFactory.GetInstance<IDecoder>();
+            _decoderFactory = ObjectFactory.GetInstance<IDecoderFactory>();
 
             Request = new HttpRequest(_encoder);
         }
 
         public HttpResponse Response { get; private set; }
         public HttpRequest Request { get; private set; }
+        public bool LoggingEnabled { get; set; }
+        public bool ThrowExceptionOnHttpError { get; set; }
 
-        void InitRequest(string uri)
+        private void InitRequest(string uri)
         {
             Request.Uri = uri;
             Request.Data = null;
@@ -120,13 +114,13 @@ namespace EasyHttp.Http
 
             return Response;
         }
-        
+
         public HttpResponse Get(string uri)
         {
             InitRequest(uri);
             Request.Method = HttpMethod.GET;
             ProcessRequest();
-            
+
             return Response;
         }
 
@@ -140,7 +134,7 @@ namespace EasyHttp.Http
                 Request.ContentEncoding = HttpContentEncoding.Utf8;
             }
             Request.Method = HttpMethod.POST;
-            
+
             ProcessRequest();
         }
 
@@ -163,7 +157,7 @@ namespace EasyHttp.Http
                 Request.Data = data;
                 Request.ContentEncoding = HttpContentEncoding.Utf8;
             }
-            
+
             Request.Method = HttpMethod.PUT;
             ProcessRequest();
         }
@@ -175,7 +169,6 @@ namespace EasyHttp.Http
             ProcessRequest();
         }
 
- 
         public void Head(string uri)
         {
             InitRequest(uri);
@@ -194,32 +187,25 @@ namespace EasyHttp.Http
             ProcessRequest();
         }
 
-        void ProcessRequest()
+        private void ProcessRequest()
         {
             var httpWebRequest = Request.PrepareRequest();
 
-            Response = new HttpResponse(_decoder);
+            Response = new HttpResponse(_decoderFactory);
 
             Response.GetResponse(httpWebRequest, _downloadFilename);
-            
+
             if (ThrowExceptionOnHttpError && IsHttpError())
             {
                 throw new HttpException(Response.StatusCode, Response.StatusDescription);
             }
-            
         }
 
-       
-
-        bool IsHttpError()
+        private bool IsHttpError()
         {
-            var num = (int) Response.StatusCode / 100;
+            var num = (int) Response.StatusCode/100;
 
             return (num == 4 || num == 5);
         }
-
-
     }
-
-   
 }
