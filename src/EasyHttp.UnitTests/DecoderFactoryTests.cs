@@ -18,7 +18,7 @@ namespace EasyHttp.UnitTests
             var decoder = Substitute.For<XmlDecoder>();
 
             container.GetInstance<XmlDecoder>().Returns(x => decoder);
-            var foundDecoder = factory.Create(HttpContentTypes.ApplicationXml);
+            var foundDecoder = factory.Create("text/xml");
 
             Assert.AreSame(decoder, foundDecoder);
         }
@@ -32,7 +32,7 @@ namespace EasyHttp.UnitTests
             var decoder = Substitute.For<JsonDecoder>(reader);
 
             container.GetInstance<JsonDecoder>().Returns(x => decoder);
-            var foundDecoder = factory.Create(HttpContentTypes.ApplicationJson);
+            var foundDecoder = factory.Create("text/json");
 
             Assert.AreSame(decoder, foundDecoder);
         }

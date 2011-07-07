@@ -14,7 +14,7 @@ namespace EasyHttp.Codecs
 
         public IDecoder Create(string contentType)
         {
-            if(contentType == HttpContentTypes.ApplicationXml)
+            if(contentType.Contains(HttpContentTypes.TextXml))
             {
                 return _container.GetInstance<XmlDecoder>();
             }

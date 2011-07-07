@@ -78,6 +78,7 @@ namespace EasyHttp.Configuration
             _registry.For<IEncoder>().Use<DefaultEncoder>();
             _registry.For<JsonDecoder>().Use<JsonDecoder>().Named("jsonDecoder");
             _registry.For<XmlDecoder>().Use<XmlDecoder>().Named("xmlDecoder");
+            _registry.For<IDecoderFactory>().Use<DecoderFactory>();
             _registry.For<IDataReader>().Singleton().Use<JsonReader>().
                 Ctor<DataReaderSettings>().Is(new DataReaderSettings(
                     CombinedResolverStrategy())).

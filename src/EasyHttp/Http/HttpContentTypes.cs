@@ -64,6 +64,7 @@ namespace EasyHttp.Http
     {
         public const string MultiPartFormData = "multipart/form-data";
         public const string TextPlain = "text/plain";
+        public const string TextXml = "text/xml";
         public const string TextHtml = "text/html";
         public const string TextCsv = "text/csv";
         public const string ApplicationJson = "application/json";
