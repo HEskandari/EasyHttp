@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DecoderFactoryTests.cs" />
+    <Compile Include="DefaultDecoderTests.cs" />
     <Compile Include="XmlDecoderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

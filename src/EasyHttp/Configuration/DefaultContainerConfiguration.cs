@@ -71,34 +71,58 @@ namespace EasyHttp.Configuration
 {
     public class DefaultContainerConfiguration : IContainerConfiguration
     {
-        readonly Registry _registry = new Registry();
+        protected readonly Registry Registry = new Registry();
 
         public Registry InitializeContainer()
         {
-            _registry.For<IEncoder>().Use<DefaultEncoder>();
-            _registry.For<JsonDecoder>().Use<JsonDecoder>().Named("jsonDecoder");
-            _registry.For<XmlDecoder>().Use<XmlDecoder>().Named("xmlDecoder");
-            _registry.For<IDecoderFactory>().Use<DecoderFactory>();
-            _registry.For<IDataReader>().Singleton().Use<JsonReader>().
-                Ctor<DataReaderSettings>().Is(new DataReaderSettings(
-                    CombinedResolverStrategy())).
-                Ctor<string[]>().Is(new [] { "application/.*json", "text/.*json"});
-            _registry.For<IDataReader>().Singleton().Use<XmlReader>().
-                Ctor<DataReaderSettings>().Is(new DataReaderSettings(CombinedResolverStrategy())).
-                Ctor<string[]>().Is(new[] { "application/.*xml", "text/.*xhtml", "text/xml", "text/html" });
-            _registry.For<IDataWriter>().Singleton().Use<JsonWriter>().
-                Ctor<DataWriterSettings>().Is(new DataWriterSettings(CombinedResolverStrategy())).
-                Ctor<string[]>().Is(new[] { "application/.*json", "text/.*json"});
-            _registry.For<IDataWriter>().Singleton().Use<XmlWriter>().
-                Ctor<DataWriterSettings>().Is(new DataWriterSettings(CombinedResolverStrategy())).
-                Ctor<string[]>().Is(new[] { "application/xml", "text/.*xhtml", "text/xml", "text/html" });
-            _registry.For<IDataWriter>().Singleton().Use<UrlEncoderWriter>().
-                Ctor<DataWriterSettings>().Is(new DataWriterSettings()).
-                Ctor<string[]>().Is(new[] { "application/x-www-form-urlencoded" });
-            _registry.For<IDataReaderProvider>().Singleton().Use<RegExBasedDataReaderProvider>();
-            _registry.For<IDataWriterProvider>().Singleton().Use<RegExBasedDataWriterProvider>();
-            
-            return _registry;
+            RegisterEncoders();
+            RegisterDecoders();
+            RegisterDataReaders();
+            RegisterDataWriters();
+            RegisterDataProviders();
+
+            return Registry;
+        }
+
+        protected virtual void RegisterDecoders()
+        {
+            Registry.For<JsonDecoder>().Use<JsonDecoder>().Named("jsonDecoder");
+            Registry.For<XmlDecoder>().Use<XmlDecoder>().Named("xmlDecoder");
+            Registry.For<IDecoderFactory>().Use<DecoderFactory>();
+        }
+
+        protected virtual void RegisterEncoders()
+        {
+            Registry.For<IEncoder>().Use<DefaultEncoder>();
+        }
+
+        protected virtual void RegisterDataProviders()
+        {
+            Registry.For<IDataReaderProvider>().Singleton().Use<RegExBasedDataReaderProvider>();
+            Registry.For<IDataWriterProvider>().Singleton().Use<RegExBasedDataWriterProvider>();
+        }
+
+        protected virtual void RegisterDataWriters()
+        {
+            Registry.For<IDataWriter>().Singleton().Use<JsonWriter>().Ctor<DataWriterSettings>().Is(
+                new DataWriterSettings(CombinedResolverStrategy())).Ctor<string[]>().Is(new[]
+                {"application/.*json", "text/.*json"});
+            Registry.For<IDataWriter>().Singleton().Use<XmlWriter>().Ctor<DataWriterSettings>().Is(
+                new DataWriterSettings(CombinedResolverStrategy())).Ctor<string[]>().Is(new[]
+                {"application/xml", "text/.*xhtml", "text/xml", "text/html"});
+            Registry.For<IDataWriter>().Singleton().Use<UrlEncoderWriter>().Ctor<DataWriterSettings>().Is(
+                new DataWriterSettings()).Ctor<string[]>().Is(new[] {"application/x-www-form-urlencoded"});
+        }
+
+        protected virtual void RegisterDataReaders()
+        {
+            Registry.For<IDataReader>().Singleton().Use<JsonReader>();
+            Registry.For<IDataReader>().Singleton().Use<JsonReader>().Ctor<DataReaderSettings>().Is(
+                new DataReaderSettings(CombinedResolverStrategy())).Ctor<string[]>().Is(new[]
+                {"application/.*json", "text/.*json"});
+            Registry.For<IDataReader>().Singleton().Use<XmlReader>().Ctor<DataReaderSettings>().Is(
+                new DataReaderSettings(CombinedResolverStrategy())).Ctor<string[]>().Is(new[]
+                {"application/.*xml", "text/.*xhtml", "text/xml", "text/html"});
         }
 
         // TODO: Do not like this. 
